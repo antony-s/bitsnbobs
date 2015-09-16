@@ -2,12 +2,12 @@
 
 # hrq NUMBER_OF_DAYS DATES...
 
-HOLIDAYS_EMAIL_ADDRESS=""
-DIR_HOLIDAY_REQUESTS=~/Documents/holidays
+HOLIDAYS_EMAIL_ADDRESS="" # Where to send the holiday request to
+DIR_HOLIDAY_REQUESTS=~/Documents/holidays # Location to store holiday request forms
 HOLIDAY_REQUEST_TMP=holiday_form.odt
 HOLIDAY_REQUEST_FORM="$DIR_HOLIDAY_REQUESTS/$HOLIDAY_REQUEST_TMP"
 REQUESTED_FORM="holiday_form_$(date +%Y_%m_%d_%H_%M_%S).odt"
-NAME=""
+NAME="" # Your name
 DIR_EXTRACTED_HOLIDAY_REQUEST_FORM=/tmp/$(uuidgen)
 N_DAYS=$1
 DATES=""

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# hrq NUMBER_OF_DAYS DATES...
+
+HOLIDAYS_EMAIL_ADDRESS=""
+DIR_HOLIDAY_REQUESTS=~/Documents/holidays
+HOLIDAY_REQUEST_TMP=holiday_form.odt
+HOLIDAY_REQUEST_FORM="$DIR_HOLIDAY_REQUESTS/$HOLIDAY_REQUEST_TMP"
+REQUESTED_FORM="holiday_form_$(date +%Y_%m_%d_%H_%M_%S).odt"
+NAME=""
+DIR_EXTRACTED_HOLIDAY_REQUEST_FORM=/tmp/$(uuidgen)
+N_DAYS=$1
+DATES=""
+
+unzip $HOLIDAY_REQUEST_FORM -d $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM 1>/dev/null
+
+for var in ${@:2}
+do
+    DATES+="<text:p text:style-name=\"P4\" >${var}</text:p>"
+done
+
+DATES=$(echo $DATES | sed 's/[\/&]/\\&/g')
+
+sed -i "s/N_DAYS/$N_DAYS/" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
+sed -i "s/DATE_REQUESTED/$(date)/" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
+sed -i "/DATES/c\\$DATES" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
+cd $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM
+zip -r "$DIR_HOLIDAY_REQUESTS/$REQUESTED_FORM" . 1>/dev/null
+echo "" | mail -s "Holiday Request" -A "$DIR_HOLIDAY_REQUESTS/$REQUESTED_FORM" "HOLIDAYS_EMAIL_ADDRESS"
+
+echo "Holiday request sent!"
+echo "$DIR_HOLIDAY_REQUESTS/$REQUESTED_FORM"

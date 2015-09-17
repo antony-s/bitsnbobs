@@ -7,7 +7,7 @@ DIR_HOLIDAY_REQUESTS=~/Documents/holidays # Location to store holiday request fo
 HOLIDAY_REQUEST_TMP=holiday_form.odt
 HOLIDAY_REQUEST_FORM="$DIR_HOLIDAY_REQUESTS/$HOLIDAY_REQUEST_TMP"
 REQUESTED_FORM="holiday_form_$(date +%Y_%m_%d_%H_%M_%S).odt"
-NAME="" # Your name
+FULL_NAME="" # Your name
 DIR_EXTRACTED_HOLIDAY_REQUEST_FORM=/tmp/$(uuidgen)
 N_DAYS=$1
 DATES=""
@@ -21,6 +21,7 @@ done
 
 DATES=$(echo $DATES | sed 's/[\/&]/\\&/g')
 
+sed -i "s/FULL_NAME/$FULL_NAME/" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
 sed -i "s/N_DAYS/$N_DAYS/" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
 sed -i "s/DATE_REQUESTED/$(date)/" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
 sed -i "/DATES/c\\$DATES" $DIR_EXTRACTED_HOLIDAY_REQUEST_FORM/content.xml
